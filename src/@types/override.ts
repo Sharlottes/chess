@@ -2,9 +2,9 @@ declare module "react" {
   export type PropsWithElementProps<
     E extends
       | HTMLElement
-      | keyof JSX.IntrinsicElements
+      | keyof React.JSX.IntrinsicElements
       | React.JSXElementConstructor<any>,
-    P = unknown
+    P = unknown,
   > = P &
     Omit<
       E extends keyof JSX.IntrinsicElements | React.JSXElementConstructor<any>

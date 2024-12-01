@@ -1,38 +1,22 @@
-html {
-  min-height: 100vh;
-  font-size: 10px;
-  overflow-x: hidden;
-}
+@layer reset, reset.base;
 
-body {
-  min-height: 100vh;
-}
+@layer reset.ase {
+  html {
+    min-height: 100vh;
+    font-size: 10px;
+  }
 
-table,
-td,
-th,
-tr {
-  width: auto;
-  height: auto;
-  margin: 0;
-  padding: 0;
-  border: none;
-  border-collapse: inherit;
-  border-spacing: 0;
-  border-color: inherit;
-  vertical-align: inherit;
-  text-align: left;
-  font-weight: inherit;
-  -webkit-border-horizontal-spacing: 0;
-  -webkit-border-vertical-spacing: 0;
-}
+  body {
+    min-height: 100vh;
+  }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+  * {
+    margin: 0;
+    padding: 0;
+  }
 
-ul,
-li {
-  list-style: none;
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
