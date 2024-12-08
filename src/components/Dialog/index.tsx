@@ -13,7 +13,9 @@ export default function Dialog({
   return (
     <div className={styles.container} aria-disabled={!open}>
       <div className={styles.backdrop} onClick={onClose} />
-      <div className={styles.body}>{children}</div>
+      <div className={styles.body}>
+        <div className={styles.content}>{children}</div>
+      </div>
     </div>
   );
 }

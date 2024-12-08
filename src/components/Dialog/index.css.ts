@@ -35,3 +35,11 @@ export const body = style({
   zIndex: 10,
   width: "fit-content",
 });
+
+export const content = style({
+  backgroundColor: "white",
+  borderRadius: "8px",
+  padding: "16px",
+  width: "360px",
+  minHeight: "120px",
+});

@@ -4,7 +4,6 @@ import { Button, TextField } from "@radix-ui/themes";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-axios.defaults.baseURL = "http://localhost:8080";
 
 export default function Login() {
   const [nickname, setNickname] = useState("");
