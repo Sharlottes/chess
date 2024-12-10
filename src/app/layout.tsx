@@ -30,7 +30,7 @@ export default function RootLayout({
             backgroundColor: "#4b4847",
           }}
         >
-          <SnackbarProvider>
+          <SnackbarProvider style={{ fontSize: "1.4rem", fontWeight: "bold" }}>
             <OverlayProvider>
               <Header />
               <main>{children}</main>
