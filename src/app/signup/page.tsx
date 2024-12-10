@@ -1,7 +1,8 @@
 "use client";
 
+import { client } from "@/lib/axios/client";
 import { Button, TextField } from "@radix-ui/themes";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -24,7 +25,7 @@ export default function Login() {
     setPassword(e.target.value);
   };
   const handleLogin = async () => {
-    const res = await axios
+    const res = await client
       .post("/api/v1/users/signup", {
         userName: id,
         password: password,
