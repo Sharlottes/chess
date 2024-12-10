@@ -27,12 +27,12 @@ export default function withAuth(
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
+      updateUser().then(() => setIsUpdating(false));
       if (userData) {
         setIsUpdating(false);
         return;
       }
       setIsUpdating(true);
-      updateUser().then(() => setIsUpdating(false));
     }, [userData, updateUser]);
 
     const checkVerification = (
