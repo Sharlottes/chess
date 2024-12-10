@@ -3,12 +3,13 @@
 import Dialog from "@/components/Dialog";
 import { Button, TextField } from "@radix-ui/themes";
 import { overlay } from "overlay-kit";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import useUserStore from "@/hooks/useUserStore";
 import { useShallow } from "zustand/react/shallow";
-import * as styles from "./page.css";
 import { useSnackbar } from "notistack";
 import withAuth from "@/components/hoc/withAuth";
+
+import * as styles from "./page.css";
 
 function UserPage() {
   const changePasswordPWRef = useRef<HTMLInputElement>(null);
@@ -104,8 +105,14 @@ function UserPage() {
     }
   };
 
+  if (!userData) return;
   return (
     <div className={styles.container}>
+      <div className={styles.title}>
+        <h1>{userData.nickname}</h1>
+        <div className={styles.divider} />
+        <p>{`${userData.record.wins}승  ${userData.record.losses}패  ${userData.record.draws}무`}</p>
+      </div>
       <Button
         color="blue"
         className={styles.button}

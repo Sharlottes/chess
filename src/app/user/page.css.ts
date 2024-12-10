@@ -28,3 +28,15 @@ export const actionBar = style({
   alignItems: "center",
   gap: "16px",
 });
+
+export const title = style({
+  color: "white",
+  textAlign: "center",
+});
+
+export const divider = style({
+  height: "1px",
+  width: "100%",
+  backgroundColor: "white",
+  margin: "8px 0",
+});
