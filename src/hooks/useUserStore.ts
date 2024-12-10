@@ -1,5 +1,4 @@
 import { client } from "@/lib/axios/client";
-import { AxiosError } from "axios";
 import { create } from "zustand";
 
 type APIReponse = { success: true } | { success: false; error: any };
@@ -106,6 +105,7 @@ const useUserStore = create<UserStore>((set) => ({
       (err) => err
     );
     if (res.status === 200) {
+      res.data.uid = uid;
       set({ data: res.data });
       return { success: true };
     } else {

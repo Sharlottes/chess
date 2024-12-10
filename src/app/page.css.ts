@@ -12,7 +12,10 @@ export const container = style({
 export const title = style({ color: "white", textAlign: "center" });
 
 export const button = style({
-  display: "block",
+  display: "flex",
+  gap: "8px",
+  justifyContent: "center",
+  alignItems: "center",
   fontWeight: "bold",
   marginTop: "8px",
   width: "240px",

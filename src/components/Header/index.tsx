@@ -30,18 +30,23 @@ export default function Header() {
       </Link>
       {userData ? (
         <>
-          <Link href="/game">
-            <Button className={styles.button} color="blue">
-              시작하기
-            </Button>
-          </Link>
           <Button className={styles.button} color="cyan" onClick={handleLogout}>
             로그아웃
           </Button>
           <Link href="/user">
-            <IconButton variant="ghost" style={{ cursor: "pointer" }}>
+            <Button
+              variant="ghost"
+              style={{
+                cursor: "pointer",
+                color: "white",
+                fontWeight: "bold",
+                fontSize: "1.8rem",
+                marginLeft: "8px",
+              }}
+            >
+              <p>{userData.nickname}</p>
               <ConfigIcon />
-            </IconButton>
+            </Button>
           </Link>
         </>
       ) : (
