@@ -14,6 +14,7 @@ import { overlay } from "overlay-kit";
 import Dialog from "@/components/Dialog";
 import { useRouter } from "next/navigation";
 import { GAME_TIME } from "@/_assets/constants/game";
+import { Subscription } from "rxjs";
 
 function Game() {
   const game = useRef(new Chess());
@@ -29,6 +30,9 @@ function Game() {
 
   const [color, setColor] = useState<"white" | "black">("white");
   const [opponent, setOpponent] = useState<CommonUser | null>(null);
+
+  const moveWatcherRef = useRef<Subscription>();
+  const gameoverWatcherRef = useRef<Subscription>();
 
   if (!userData) return;
 
@@ -49,68 +53,78 @@ function Game() {
         setOppoTimeLeft((prev) => prev - 100);
       }, 100);
     }
-    stomp.watch(`/sub/move/${userData.uid}`).subscribe((message) => {
-      const data = JSON.parse(message.body) as MoveSubscribe;
 
-      switch (data.type) {
-        case "success":
-          if (timeoutRef.current) clearTimeout(timeoutRef.current);
-          if (oppoTimeoutRef.current) clearTimeout(oppoTimeoutRef.current);
+    moveWatcherRef.current?.unsubscribe();
+    moveWatcherRef.current = stomp
+      .watch(`/sub/move/${userData.uid}`)
+      .subscribe((message) => {
+        const data = JSON.parse(message.body) as MoveSubscribe;
 
-          setTimeLeft(data.timeLeft);
-          setOppoTimeLeft(data.timeLeftOpponent);
-          if (data.turn == color.toUpperCase()) {
-            timeoutRef.current = setInterval(() => {
-              setTimeLeft((prev) => prev - 100);
-            }, 100);
-          } else {
-            oppoTimeoutRef.current = setInterval(() => {
-              setOppoTimeLeft((prev) => prev - 100);
-            }, 100);
-          }
-          console.log(`/sub/move/${userData.uid}, Received: ${message.body}`);
-          game.current.load(data.fen);
-          rerender();
-          break;
-        case "not-your-turn":
-          enqueueSnackbar(data.message, { variant: "warning" });
-          break;
-        case "error":
-          enqueueSnackbar(data.message, { variant: "error" });
-          break;
-        case "checked":
-          enqueueSnackbar(data.message, { variant: "info" });
-          break;
-        case "invalid-move":
-          enqueueSnackbar(data.message, { variant: "warning" });
-          break;
-      }
-    });
-    stomp.watch(`/sub/game-over/${userData.uid}`).subscribe((message) => {
-      const data = JSON.parse(message.body) as GameOverSubscribe;
+        switch (data.type) {
+          case "success":
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+            if (oppoTimeoutRef.current) clearTimeout(oppoTimeoutRef.current);
 
-      console.log(`/sub/game-over/${userData.uid}, Received: ${message.body}`);
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      if (oppoTimeoutRef.current) clearTimeout(oppoTimeoutRef.current);
-      overlay.open(({ isOpen, close }) => (
-        <Dialog
-          open={isOpen}
-          onClose={() => {
-            router.push("/");
-            close();
-          }}
-        >
-          <div>
-            <h1>{data.message}</h1>
-            <h2>{data.gameResult.toUpperCase()}</h2>
-            <p>승: {data.record.wins}</p>
-            <p>패: {data.record.losses}</p>
-            <p>무: {data.record.draws}</p>
-          </div>
-        </Dialog>
-      ));
-      stomp.deactivate();
-    });
+            setTimeLeft(data.timeLeft);
+            setOppoTimeLeft(data.timeLeftOpponent);
+            if (data.turn == color.toUpperCase()) {
+              timeoutRef.current = setInterval(() => {
+                setTimeLeft((prev) => prev - 100);
+              }, 100);
+            } else {
+              oppoTimeoutRef.current = setInterval(() => {
+                setOppoTimeLeft((prev) => prev - 100);
+              }, 100);
+            }
+            console.log(`/sub/move/${userData.uid}, Received: ${message.body}`);
+            game.current.load(data.fen);
+            rerender();
+            break;
+          case "not-your-turn":
+            enqueueSnackbar(data.message, { variant: "warning" });
+            break;
+          case "error":
+            enqueueSnackbar(data.message, { variant: "error" });
+            break;
+          case "checked":
+            enqueueSnackbar(data.message, { variant: "info" });
+            break;
+          case "invalid-move":
+            enqueueSnackbar(data.message, { variant: "warning" });
+            break;
+        }
+      });
+
+    gameoverWatcherRef.current?.unsubscribe();
+    gameoverWatcherRef.current = stomp
+      .watch(`/sub/game-over/${userData.uid}`)
+      .subscribe((message) => {
+        const data = JSON.parse(message.body) as GameOverSubscribe;
+
+        console.log(
+          `/sub/game-over/${userData.uid}, Received: ${message.body}`
+        );
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        if (oppoTimeoutRef.current) clearTimeout(oppoTimeoutRef.current);
+        overlay.open(({ isOpen, close }) => (
+          <Dialog
+            open={isOpen}
+            onClose={() => {
+              router.push("/");
+              close();
+            }}
+          >
+            <div>
+              <h1>{data.message}</h1>
+              <h2>{data.gameResult.toUpperCase()}</h2>
+              <p>승: {data.record.wins}</p>
+              <p>패: {data.record.losses}</p>
+              <p>무: {data.record.draws}</p>
+            </div>
+          </Dialog>
+        ));
+        stomp.deactivate();
+      });
 
     rerender();
   }, []);

@@ -10,10 +10,11 @@ function createStompClient() {
   client.activate();
 
   // * ping pong
-  client
-    .watch({ destination: "/sub/messages", subscribeOnlyOnce: true })
+  const watcher = client
+    .watch({ destination: "/sub/messages" })
     .subscribe((message) => {
       console.log("/sub/messages, Received: " + message.body);
+      watcher.unsubscribe();
     });
   client.publish({
     destination: "/pub/send",

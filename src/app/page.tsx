@@ -11,9 +11,10 @@ import useUserStore from "@/hooks/useUserStore";
 import * as styles from "./page.css";
 import { useShallow } from "zustand/react/shallow";
 import stomp, { send } from "@/lib/stomp";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSnackbar } from "notistack";
 import { GAME_TIME, TIME_ADD } from "@/_assets/constants/game";
+import { Subscription } from "rxjs";
 
 export default function App() {
   const pathname = usePathname();
@@ -23,13 +24,17 @@ export default function App() {
   );
   const { enqueueSnackbar } = useSnackbar();
   const [isMatchmaking, setIsMatchmaking] = useState(false);
-  const handleMatchmaking = () => {
+
+  const findGameWatcherRef = useRef<Subscription>();
+  useEffect(() => {
     if (!userData) return;
-    setIsMatchmaking(true);
-    stomp
+
+    if (findGameWatcherRef.current) {
+      findGameWatcherRef.current?.unsubscribe();
+    }
+    findGameWatcherRef.current = stomp
       .watch({
         destination: `/sub/find-game/${userData.uid}`,
-        subscribeOnlyOnce: true,
       })
       .subscribe((message) => {
         const data = JSON.parse(message.body) as FindGameSubscribe;
@@ -47,6 +52,8 @@ export default function App() {
             sessionStorage.setItem("opponent", JSON.stringify(data.opponent));
             setIsMatchmaking(false);
             router.push("/game");
+
+            findGameWatcherRef.current?.unsubscribe();
             break;
           case "waiting":
             enqueueSnackbar(data.message, { variant: "warning" });
@@ -61,6 +68,10 @@ export default function App() {
             break;
         }
       });
+  }, [userData]);
+  const handleMatchmaking = () => {
+    if (!userData) return;
+    setIsMatchmaking(true);
     send("/pub/find-game", {
       uid: userData.uid,
       timeLeft: GAME_TIME,
