@@ -13,8 +13,7 @@ import * as styles from "./page.css";
 import { overlay } from "overlay-kit";
 import Dialog from "@/components/Dialog";
 import { useRouter } from "next/navigation";
-
-const TIME_LEFT = 30 * 60 * 1000;
+import { GAME_TIME } from "@/_assets/constants/game";
 
 function Game() {
   const game = useRef(new Chess());
@@ -25,8 +24,8 @@ function Game() {
 
   const oppoTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [oppoTimeLeft, setOppoTimeLeft] = useState(TIME_LEFT);
-  const [timeLeft, setTimeLeft] = useState(TIME_LEFT);
+  const [oppoTimeLeft, setOppoTimeLeft] = useState(GAME_TIME);
+  const [timeLeft, setTimeLeft] = useState(GAME_TIME);
 
   const [color, setColor] = useState<"white" | "black">("white");
   const [opponent, setOpponent] = useState<{

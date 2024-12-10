@@ -13,6 +13,7 @@ import { useShallow } from "zustand/react/shallow";
 import stomp, { send } from "@/lib/stomp";
 import { useState } from "react";
 import { useSnackbar } from "notistack";
+import { GAME_TIME, TIME_ADD } from "@/_assets/constants/game";
 
 export default function App() {
   const pathname = usePathname();
@@ -62,8 +63,8 @@ export default function App() {
       });
     send("/pub/find-game", {
       uid: userData.uid,
-      timeLeft: 30 * 60 * 1000,
-      timeToAddEveryTurnStart: 10 * 1000,
+      timeLeft: GAME_TIME,
+      timeToAddEveryTurnStart: TIME_ADD,
     });
     console.log("send find-game from " + userData.uid);
   };
