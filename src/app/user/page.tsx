@@ -18,14 +18,16 @@ function UserPage() {
   const changeNicknameValueRef = useRef<HTMLInputElement>(null);
   const deleteUserRef = useRef<HTMLInputElement>(null);
 
-  const [userData, setPassword, setNickname, deleteUser] = useUserStore(
-    useShallow((state) => [
-      state.data,
-      state.setPassword,
-      state.setNickname,
-      state.deleteUser,
-    ])
-  );
+  const [userData, setPassword, setNickname, deleteUser, updateUser] =
+    useUserStore(
+      useShallow((state) => [
+        state.data,
+        state.setPassword,
+        state.setNickname,
+        state.deleteUser,
+        state.updateUser,
+      ])
+    );
   const { enqueueSnackbar } = useSnackbar();
 
   const handleChangePassword = async () => {
@@ -83,7 +85,7 @@ function UserPage() {
     if (!deleteUserRef.current) return;
 
     console.log(userData, ",", deleteUserRef.current.value);
-    if (!userData) return;
+    if (!userData || !userData.record) return;
     const res = await deleteUser(userData.uid, deleteUserRef.current.value);
     if (res.success) {
       enqueueSnackbar("계정이 성공적으로 삭제되었습니다.", {

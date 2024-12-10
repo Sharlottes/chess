@@ -10,8 +10,6 @@ export interface UserStore {
         password: string;
         nickname: string;
         record: {
-          id: number;
-          user: string;
           wins: number;
           losses: number;
           draws: number;
@@ -69,7 +67,8 @@ const useUserStore = create<UserStore>((set) => ({
   ) => {
     const res = await client
       .put(`/api/v1/users/${uid}/password`, {
-        data: { oldPassword, newPassword },
+        oldPassword,
+        newPassword,
       })
       .then(
         (res) => res,
@@ -85,7 +84,8 @@ const useUserStore = create<UserStore>((set) => ({
   setNickname: async (uid: number, password: string, newNickname: string) => {
     const res = await client
       .put(`/api/v1/users/${uid}/nickname`, {
-        data: { password, newNickname },
+        password,
+        newNickname,
       })
       .then(
         (res) => res,

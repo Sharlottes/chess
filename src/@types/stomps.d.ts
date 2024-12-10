@@ -1,3 +1,8 @@
+interface CommonUser {
+  nickname: string;
+  record: { wins: number; losses: number; draws: number };
+}
+
 type FindGamePublish = {
   uid: number;
   timeLeft: number;
@@ -13,10 +18,7 @@ type FindGameSubscribe =
       type: "game-start";
       message: string;
       color: "white" | "black";
-      opponent: {
-        nickname: string;
-        record: { wins: number; losses: number; draws: number };
-      };
+      opponent: CommonUser;
     };
 
 type MovePublish = {

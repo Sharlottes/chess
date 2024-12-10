@@ -28,14 +28,7 @@ function Game() {
   const [timeLeft, setTimeLeft] = useState(GAME_TIME);
 
   const [color, setColor] = useState<"white" | "black">("white");
-  const [opponent, setOpponent] = useState<{
-    nickname: string;
-    record: {
-      wins: number;
-      losses: number;
-      draws: number;
-    };
-  } | null>(null);
+  const [opponent, setOpponent] = useState<CommonUser | null>(null);
 
   if (!userData) return;
 
