@@ -106,8 +106,8 @@ function UserPage() {
       return false;
     }
   };
+  if (!userData || !userData.record) return;
 
-  if (!userData) return;
   return (
     <div className={styles.container}>
       <div className={styles.title}>
