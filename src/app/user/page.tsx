@@ -4,12 +4,11 @@ import Dialog from "@/components/Dialog";
 import { Button, TextField } from "@radix-ui/themes";
 import { overlay } from "overlay-kit";
 import { useRef, useState } from "react";
-import { client } from "@/lib/axios/client";
 import useUserStore from "@/hooks/useUserStore";
 import { useShallow } from "zustand/react/shallow";
 import * as styles from "./page.css";
 import { useSnackbar } from "notistack";
-import withAuth from "@/components/Dialog/hoc/withAuth";
+import withAuth from "@/components/hoc/withAuth";
 
 function UserPage() {
   const changePasswordPWRef = useRef<HTMLInputElement>(null);

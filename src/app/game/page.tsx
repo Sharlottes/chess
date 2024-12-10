@@ -5,7 +5,7 @@ import { Chess, Square } from "chess.js";
 import { Chessboard } from "react-chessboard";
 
 import useUserStore from "@/hooks/useUserStore";
-import withAuth from "@/components/Dialog/hoc/withAuth";
+import withAuth from "@/components/hoc/withAuth";
 import stomp, { send } from "@/lib/stomp";
 import { useSnackbar } from "notistack";
 
